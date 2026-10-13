@@ -1,0 +1,385 @@
+/* შეხვედრა 1 — საერთო სტილები ყველა დავალებისთვის */
+
+:root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --text: #1f2933;
+    --muted: #616e7c;
+    --border: #d9dee4;
+    --primary: #1d4ed8;
+    --primary-dark: #1e3a8a;
+    --success: #15803d;
+    --success-bg: #ecfdf3;
+    --danger: #b91c1c;
+    --danger-bg: #fef2f2;
+    --highlight: #fff7d6;
+    --radius: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans Georgian", "Sylfaen", "DejaVu Sans", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+}
+
+.container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+}
+
+header.page-header {
+    margin-bottom: 24px;
+}
+
+header.page-header h1 {
+    margin: 0 0 6px;
+    font-size: 1.6rem;
+}
+
+header.page-header p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+/* ---------- ფორმა ---------- */
+
+fieldset {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px 6px;
+    margin: 0 0 18px;
+}
+
+legend {
+    padding: 0 6px;
+    font-weight: 600;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0 18px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.required {
+    color: var(--danger);
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+    color: var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+    border-color: var(--primary);
+}
+
+.hint {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: #e5e9f0;
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #d5dbe5;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ---------- შეტყობინებები ---------- */
+
+.alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+}
+
+.alert ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+}
+
+.alert-error {
+    background: var(--danger-bg);
+    border: 1px solid #fecaca;
+    color: var(--danger);
+}
+
+.alert-success {
+    background: var(--success-bg);
+    border: 1px solid #bbf7d0;
+    color: var(--success);
+}
+
+/* ---------- ცხრილები ---------- */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+}
+
+caption {
+    text-align: left;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding-bottom: 10px;
+}
+
+th,
+td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+thead th {
+    background: #eef2f7;
+}
+
+tbody th {
+    width: 42%;
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+tr.total td,
+tr.total th {
+    font-weight: 700;
+    background: var(--success-bg);
+}
+
+tr.current td {
+    background: var(--highlight);
+    font-weight: 700;
+}
+
+.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+td.num {
+    white-space: nowrap;
+}
+
+.center {
+    text-align: center;
+}
+
+.badge {
+    display: inline-block;
+    min-width: 2.4em;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+    background: var(--success);
+}
+
+.badge.fail {
+    background: var(--danger);
+}
+
+.ok,
+.wrong {
+    white-space: nowrap;
+}
+
+.ok {
+    color: var(--success);
+    font-weight: 700;
+}
+
+.wrong {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+/* ---------- ტესტი (დავალება 3) ---------- */
+
+.question {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+}
+
+.question-title {
+    margin: 0 0 10px;
+    font-weight: 600;
+}
+
+.question-type {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: #eef2f7;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.option {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #f1f5f9;
+}
+
+.option input {
+    margin-right: 8px;
+}
+
+.score {
+    margin: 0 0 16px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ---------- მთავარი გვერდი ---------- */
+
+.task-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.task-list li {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+}
+
+.task-list h2 {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+}
+
+.task-list p {
+    margin: 0 0 12px;
+    color: var(--muted);
+}
+
+footer.page-footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .card {
+        padding: 18px 14px;
+    }
+
+    tbody th {
+        width: auto;
+    }
+}
