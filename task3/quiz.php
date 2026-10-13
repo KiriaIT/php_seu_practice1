@@ -1,19 +1,17 @@
 <?php
 /**
- * დავალება 3 — სტუდენტის შემოწმების პროგრამა (ტესტი).
- *
- * ფორმის მონაცემები მუშავდება $_POST მეთოდით.
- * სულ 5 შეკითხვა: 3 ტესტური (4 სავარაუდო პასუხი, სწორია მხოლოდ ერთი)
- * და 2 ღია (პასუხს სტუდენტი წერს ტექსტურ ველში).
+ * Task 3 — Student quiz.
+ * Form data is processed via $_POST. 5 questions: 3 multiple-choice
+ * (4 options, exactly one correct) and 2 open-ended (free-text answer).
  */
 
 const TYPE_TEST = 'test';
 const TYPE_OPEN = 'open';
 
 /**
- * შეკითხვები. სწორი პასუხები ინახება მხოლოდ სერვერზე და HTML-ში არ ჩანს.
- *  - ტესტური: 'options' — ოთხი სავარაუდო პასუხი, 'correct' — სწორი პასუხის გასაღები;
- *  - ღია: 'answers' — მისაღები სწორი პასუხ(ებ)ი, 'display' — ეკრანზე საჩვენებელი სწორი პასუხი.
+ * Correct answers live only on the server and are never rendered into the form.
+ *  - test: 'options' are the four choices, 'correct' is the key of the right one;
+ *  - open: 'answers' lists accepted answers (normalized), 'display' is shown in the results.
  */
 const QUESTIONS = [
     1 => [
@@ -63,16 +61,15 @@ const QUESTIONS = [
     ],
 ];
 
-/** HTML-ში უსაფრთხოდ გამოსატანი მნიშვნელობა (XSS-ისგან დაცვა). */
+/** Escapes a value for safe HTML output (XSS protection). */
 function e($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
 /**
- * ღია პასუხის ნორმალიზება შედარებისთვის:
- * რეგისტრი არ არის მნიშვნელოვანი (PHP-ში ფუნქციების სახელები რეგისტრზე დამოკიდებული არ არის),
- * იშლება ჰარები, ბოლოში მდგარი „;“ და „()“.
+ * Normalizes an open answer before comparison: lowercased (PHP function names
+ * are case-insensitive), whitespace removed, trailing ";" and "()" stripped.
  */
 function normalizeAnswer(string $answer): string
 {
@@ -87,7 +84,6 @@ function normalizeAnswer(string $answer): string
     return $answer;
 }
 
-/** სტუდენტის პასუხის შემოწმება. */
 function isCorrect(array $question, string $answer): bool
 {
     if ($question['type'] === TYPE_TEST) {
@@ -109,7 +105,7 @@ if ($isSubmitted) {
         $answer = $postedAnswers[$number] ?? '';
         $answer = is_string($answer) ? trim($answer) : '';
 
-        // ტესტურ შეკითხვაზე მიიღება მხოლოდ არსებული ვარიანტი (a, b, c ან d)
+        // Anything other than one of the offered options (a–d) counts as unanswered.
         if ($question['type'] === TYPE_TEST && !array_key_exists($answer, $question['options'])) {
             $answer = '';
         }

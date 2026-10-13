@@ -1,35 +1,30 @@
 <?php
 /**
- * დავალება 1 (ბ) — სახელფასო უწყისი.
- *
- * ფორმის მონაცემები მუშავდება $_GET მეთოდით.
- * მომხმარებელი თავად ირჩევს საშემოსავლო გადასახადის პროცენტს
- * და გამოთვლა სრულდება არჩეული მნიშვნელობის მიხედვით.
+ * Task 1 (b) — Payroll sheet.
+ * Form data is processed via $_GET; the user picks the income tax rate.
  */
 
-// ასარჩევი საშემოსავლო გადასახადის განაკვეთები, %
-const TAX_RATES = [5, 10, 15, 20, 25, 30];
+const TAX_RATES = [5, 10, 15, 20, 25, 30]; // percent
 
-/** HTML-ში უსაფრთხოდ გამოსატანი მნიშვნელობა (XSS-ისგან დაცვა). */
+/** Escapes a value for safe HTML output (XSS protection). */
 function e($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
-/** $_GET-იდან ველის წაკითხვა (სტრიქონის სახით, ზედმეტი ჰარების გარეშე). */
+/** Returns a trimmed field from $_GET; non-string input (e.g. an array) becomes ''. */
 function getField(string $name): string
 {
     $value = $_GET[$name] ?? '';
     return is_string($value) ? trim($value) : '';
 }
 
-/** თანხის ფორმატირება: 1 234.50 ₾ */
 function money(float $amount): string
 {
     return number_format($amount, 2, '.', ' ') . ' ₾';
 }
 
-/** სახელი/გვარი: მხოლოდ ასოები, ჰარი, დეფისი ან აპოსტროფი (მაქს. 50 სიმბოლო). */
+/** Letters, spaces, hyphens and apostrophes only; up to 50 characters. */
 function isValidName(string $name): bool
 {
     return preg_match("/^\p{L}[\p{L} '-]{0,49}$/u", $name) === 1;
@@ -46,7 +41,6 @@ $errors = [];
 $result = null;
 
 if ($isSubmitted) {
-    // --- ვალიდაცია ---
     if ($firstName === '') {
         $errors[] = 'შეიყვანეთ სახელი.';
     } elseif (!isValidName($firstName)) {
@@ -72,7 +66,7 @@ if ($isSubmitted) {
         $errors[] = 'ხელფასის რაოდენობა ძალიან დიდია.';
     }
 
-    // განაკვეთი უნდა იყოს ჩამონათვალიდან არჩეული მნიშვნელობა
+    // Only rates offered in the select are accepted, even if the URL is edited by hand.
     $taxRate = filter_var($taxRateRaw, FILTER_VALIDATE_INT);
     if ($taxRateRaw === '') {
         $errors[] = 'აირჩიეთ საშემოსავლო გადასახადის პროცენტი.';
@@ -80,11 +74,10 @@ if ($isSubmitted) {
         $errors[] = 'საშემოსავლო გადასახადის პროცენტი არასწორია.';
     }
 
-    // --- გამოთვლა ---
     if (empty($errors)) {
         $salary    = round($salary, 2);
-        $tax       = round($salary * $taxRate / 100, 2); // საშემოსავლო გადასახადი
-        $netSalary = round($salary - $tax, 2);           // ხელზე ასაღები ხელფასი
+        $tax       = round($salary * $taxRate / 100, 2);
+        $netSalary = round($salary - $tax, 2);
 
         $result = [
             'salary'     => $salary,

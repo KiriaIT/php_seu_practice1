@@ -1,33 +1,30 @@
 <?php
 /**
- * დავალება 1 (ა) — სახელფასო უწყისი.
- *
- * ფორმის მონაცემები მუშავდება $_GET მეთოდით.
- * საშემოსავლო გადასახადი ფიქსირებულია და შეადგენს 20%-ს.
+ * Task 1 (a) — Payroll sheet.
+ * Form data is processed via $_GET; income tax is fixed at 20%.
  */
 
-const TAX_RATE = 20; // საშემოსავლო გადასახადი, %
+const TAX_RATE = 20; // percent
 
-/** HTML-ში უსაფრთხოდ გამოსატანი მნიშვნელობა (XSS-ისგან დაცვა). */
+/** Escapes a value for safe HTML output (XSS protection). */
 function e($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
-/** $_GET-იდან ველის წაკითხვა (სტრიქონის სახით, ზედმეტი ჰარების გარეშე). */
+/** Returns a trimmed field from $_GET; non-string input (e.g. an array) becomes ''. */
 function getField(string $name): string
 {
     $value = $_GET[$name] ?? '';
     return is_string($value) ? trim($value) : '';
 }
 
-/** თანხის ფორმატირება: 1 234.50 ₾ */
 function money(float $amount): string
 {
     return number_format($amount, 2, '.', ' ') . ' ₾';
 }
 
-/** სახელი/გვარი: მხოლოდ ასოები, ჰარი, დეფისი ან აპოსტროფი (მაქს. 50 სიმბოლო). */
+/** Letters, spaces, hyphens and apostrophes only; up to 50 characters. */
 function isValidName(string $name): bool
 {
     return preg_match("/^\p{L}[\p{L} '-]{0,49}$/u", $name) === 1;
@@ -43,7 +40,6 @@ $errors = [];
 $result = null;
 
 if ($isSubmitted) {
-    // --- ვალიდაცია ---
     if ($firstName === '') {
         $errors[] = 'შეიყვანეთ სახელი.';
     } elseif (!isValidName($firstName)) {
@@ -69,11 +65,10 @@ if ($isSubmitted) {
         $errors[] = 'ხელფასის რაოდენობა ძალიან დიდია.';
     }
 
-    // --- გამოთვლა ---
     if (empty($errors)) {
         $salary    = round($salary, 2);
-        $tax       = round($salary * TAX_RATE / 100, 2); // საშემოსავლო გადასახადი
-        $netSalary = round($salary - $tax, 2);            // ხელზე ასაღები ხელფასი
+        $tax       = round($salary * TAX_RATE / 100, 2);
+        $netSalary = round($salary - $tax, 2);
 
         $result = [
             'salary'     => $salary,

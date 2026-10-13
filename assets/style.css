@@ -1,4 +1,4 @@
-/* შეხვედრა 1 — საერთო სტილები ყველა დავალებისთვის */
+/* Shared styles for all Meeting 1 exercises */
 
 :root {
     --bg: #f4f5f7;
@@ -73,7 +73,7 @@ header.page-header p {
     font-size: 1.25rem;
 }
 
-/* ---------- ფორმა ---------- */
+/* ---------- Forms ---------- */
 
 fieldset {
     border: 1px solid var(--border);
@@ -167,7 +167,7 @@ textarea:focus {
     gap: 10px;
 }
 
-/* ---------- შეტყობინებები ---------- */
+/* ---------- Alerts ---------- */
 
 .alert {
     border-radius: 8px;
@@ -192,7 +192,7 @@ textarea:focus {
     color: var(--success);
 }
 
-/* ---------- ცხრილები ---------- */
+/* ---------- Tables ---------- */
 
 .table-wrap {
     overflow-x: auto;
@@ -284,7 +284,7 @@ td.num {
     font-weight: 700;
 }
 
-/* ---------- ტესტი (დავალება 3) ---------- */
+/* ---------- Quiz (task 3) ---------- */
 
 .question {
     border: 1px solid var(--border);
@@ -340,7 +340,7 @@ td.num {
     border: 0;
 }
 
-/* ---------- მთავარი გვერდი ---------- */
+/* ---------- Home page ---------- */
 
 .task-list {
     list-style: none;

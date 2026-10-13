@@ -1,16 +1,11 @@
 <?php
 /**
- * დავალება 2 — ნიშნების უწყისი.
- *
- * ფორმის მონაცემები მუშავდება $_POST მეთოდით.
- * მიღებული ქულის (0–100) მიხედვით განისაზღვრება შეფასება:
- * A, B, C, D, E (დადებითი) და FX, F (უარყოფითი).
+ * Task 2 — Grade sheet.
+ * Form data is processed via $_POST; the 0–100 score is mapped to a letter grade
+ * (A–E are passing grades, FX and F are failing).
  */
 
-/**
- * შეფასების სისტემა (საქართველოს განათლებისა და მეცნიერების მინისტრის
- * 2007 წლის 5 იანვრის №3 ბრძანება).
- */
+// Georgian higher-education grading scale (Order of the Minister of Education No. 3, 5 January 2007).
 const GRADE_SCALE = [
     ['letter' => 'A',  'min' => 91, 'max' => 100, 'label' => 'ფრიადი',             'passed' => true],
     ['letter' => 'B',  'min' => 81, 'max' => 90,  'label' => 'ძალიან კარგი',       'passed' => true],
@@ -26,26 +21,25 @@ const GRADE_SCALE = [
 const COURSES   = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
 const SEMESTERS = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI', 7 => 'VII', 8 => 'VIII'];
 
-/** HTML-ში უსაფრთხოდ გამოსატანი მნიშვნელობა (XSS-ისგან დაცვა). */
+/** Escapes a value for safe HTML output (XSS protection). */
 function e($value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
-/** $_POST-იდან ველის წაკითხვა (სტრიქონის სახით, ზედმეტი ჰარების გარეშე). */
+/** Returns a trimmed field from $_POST; non-string input (e.g. an array) becomes ''. */
 function postField(string $name): string
 {
     $value = $_POST[$name] ?? '';
     return is_string($value) ? trim($value) : '';
 }
 
-/** სახელი/გვარი: მხოლოდ ასოები, ჰარი, დეფისი ან აპოსტროფი (მაქს. 50 სიმბოლო). */
+/** Letters, spaces, hyphens and apostrophes only; up to 50 characters. */
 function isValidName(string $name): bool
 {
     return preg_match("/^\p{L}[\p{L} '-]{0,49}$/u", $name) === 1;
 }
 
-/** ქულის მიხედვით შეფასების განსაზღვრა. */
 function getGrade(int $score): array
 {
     foreach (GRADE_SCALE as $grade) {
@@ -54,10 +48,10 @@ function getGrade(int $score): array
         }
     }
 
-    throw new InvalidArgumentException('ქულა უნდა იყოს 0-დან 100-მდე.');
+    throw new InvalidArgumentException('Score must be between 0 and 100.');
 }
 
-// ფორმის ველები: [სახელი => ქართული დასახელება შეცდომის ტექსტისთვის]
+// Field name => label used in error messages.
 $nameFields = [
     'student_first_name'  => 'სტუდენტის სახელი',
     'student_last_name'   => 'სტუდენტის გვარი',
@@ -77,7 +71,6 @@ $errors = [];
 $result = null;
 
 if ($isSubmitted) {
-    // --- ვალიდაცია ---
     foreach ($nameFields as $field => $title) {
         if ($data[$field] === '') {
             $errors[] = "შეიყვანეთ: {$title}.";
@@ -102,7 +95,7 @@ if ($isSubmitted) {
         $semester = false;
     }
 
-    // N კურსს შეესაბამება (2N-1) და 2N სემესტრები
+    // Year N of study covers semesters 2N-1 and 2N.
     if ($course !== false && $semester !== false && (int) ceil($semester / 2) !== $course) {
         $errors[] = sprintf(
             '%s კურსს შეესაბამება %s ან %s სემესტრი.',
@@ -125,7 +118,6 @@ if ($isSubmitted) {
         $errors[] = 'ქულა უნდა იყოს მთელი რიცხვი 0-დან 100-მდე.';
     }
 
-    // --- შეფასების განსაზღვრა ---
     if (empty($errors)) {
         $result = [
             'course'   => $course,
